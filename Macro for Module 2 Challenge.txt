@@ -1,0 +1,72 @@
+Sub StockAnalysis()
+
+    Dim ws As Worksheet
+    Dim LastRow As Long, i As Long, StartRow As Long
+    Dim Ticker As String
+    Dim YearlyChange As Double, PercentChange As Double, TotalVolume As Double
+    Dim OpenPrice As Double, ClosePrice As Double
+    Dim GreatestIncrease As Double, GreatestDecrease As Double, GreatestVolume As Double
+    Dim IncreaseTicker As String, DecreaseTicker As String, VolumeTicker As String
+
+    For Each ws In ThisWorkbook.Worksheets
+        LastRow = ws.Cells(Rows.Count, 1).End(xlUp).Row
+        StartRow = 2
+        ws.Range("I1:L1").Value = Array("Ticker", "Yearly Change", "Percent Change", "Total Volume", "Greatest % Increase", "Greatest % Decrease", "Greatest Total Volume")
+        i = 2
+
+        For j = StartRow To LastRow
+            If ws.Cells(j + 1, 1).Value <> ws.Cells(j, 1).Value Then
+                Ticker = ws.Cells(j, 1).Value
+                ClosePrice = ws.Cells(j, 6).Value
+                OpenPrice = ws.Cells(StartRow, 3).Value
+                YearlyChange = ClosePrice - OpenPrice
+                If OpenPrice <> 0 Then
+                    PercentChange = YearlyChange / OpenPrice
+                Else
+                    PercentChange = 0
+                End If
+                TotalVolume = Application.WorksheetFunction.Sum(ws.Range(ws.Cells(StartRow, 7), ws.Cells(j, 7)))
+
+                ws.Cells(i, 9).Value = Ticker
+                ws.Cells(i, 10).Value = YearlyChange
+                ws.Cells(i, 11).Value = PercentChange
+                ws.Cells(i, 12).Value = TotalVolume
+
+                If i = 2 Then
+                    GreatestIncrease = PercentChange
+                    GreatestDecrease = PercentChange
+                    GreatestVolume = TotalVolume
+                    IncreaseTicker = Ticker
+                    DecreaseTicker = Ticker
+                    VolumeTicker = Ticker
+                Else
+                    If PercentChange > GreatestIncrease Then
+                        GreatestIncrease = PercentChange
+                        IncreaseTicker = Ticker
+                    ElseIf PercentChange < GreatestDecrease Then
+                        GreatestDecrease = PercentChange
+                        DecreaseTicker = Ticker
+                    End If
+                    If TotalVolume > GreatestVolume Then
+                        GreatestVolume = TotalVolume
+                        VolumeTicker = Ticker
+                    End If
+                End If
+
+                StartRow = j + 1
+                i = i + 1
+            End If
+        Next j
+
+        ws.Cells(2, 14).Value = IncreaseTicker
+        ws.Cells(2, 15).Value = GreatestIncrease
+        ws.Cells(3, 14).Value = DecreaseTicker
+        ws.Cells(3, 15).Value = GreatestDecrease
+        ws.Cells(4, 14).Value = VolumeTicker
+        ws.Cells(4, 15).Value = GreatestVolume
+
+        ws.Columns("J:L").NumberFormat = "0.00"
+        ws.Columns("O").NumberFormat = "0.00"
+    Next ws
+
+End Sub

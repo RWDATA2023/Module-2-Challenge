@@ -1,0 +1,14 @@
+Detailed Explanation:
+1. The code starts by declaring variables for the worksheet, last row, start row, ticker, yearly change, percent change, total volume, open price, close price, and the greatest increase, greatest decrease, and greatest volume. 
+2. It then loops through each worksheet in the workbook using a For Each loop. 
+3. Within the loop, it identifies the last row of data using the End(xlUp) method and sets the start row to 2. 
+4. It then sets the column headers for the results in cells I1 to L1 using an array. 
+5. It initializes the counter variable i to 2. 
+6. It then loops through each row of data using a For loop. 
+7. It checks if the ticker symbol in the next row is different from the current row. If it is, it calculates the yearly change, percent change, and total volume for the current ticker. 
+8. It then writes the results to cells I to L for the current ticker. 
+9. It also checks if the current ticker has the greatest percent increase, greatest percent decrease, or greatest total volume. If it does, it updates the corresponding variables. 
+10. It then sets the start row to the next row and increments the counter variable i. 
+11. Once the loop is complete, it writes the ticker symbols with the greatest percent increase, greatest percent decrease, and greatest total volume to cells O2 to O4, and their corresponding values to cells P2 to P4. 
+12. It formats columns J to L and column O to display two decimal places. 
+13. The loop then moves on to the next worksheet until all worksheets have been analyzed.
